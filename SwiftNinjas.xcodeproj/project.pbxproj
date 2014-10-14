@@ -25,7 +25,7 @@
 		B9FBF67E19EB814A009483A2 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FBF67D19EB814A009483A2 /* GameOverScene.swift */; };
 		B9FBF68019EB8B84009483A2 /* Dice.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FBF67F19EB8B84009483A2 /* Dice.swift */; };
 		B9FBF68219EB8E2E009483A2 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FBF68119EB8E2E009483A2 /* Common.swift */; };
-		B9FBF68419EB927E009483A2 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FBF68319EB927E009483A2 /* Sound.swift */; };
+		B9FBF68419EB927E009483A2 /* BackgroundMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FBF68319EB927E009483A2 /* BackgroundMusic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,7 +61,7 @@
 		B9FBF67D19EB814A009483A2 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		B9FBF67F19EB8B84009483A2 /* Dice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dice.swift; sourceTree = "<group>"; };
 		B9FBF68119EB8E2E009483A2 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
-		B9FBF68319EB927E009483A2 /* Sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
+		B9FBF68319EB927E009483A2 /* BackgroundMusic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundMusic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,7 +115,7 @@
 				B9FBF67D19EB814A009483A2 /* GameOverScene.swift */,
 				B9FBF67F19EB8B84009483A2 /* Dice.swift */,
 				B9FBF68119EB8E2E009483A2 /* Common.swift */,
-				B9FBF68319EB927E009483A2 /* Sound.swift */,
+				B9FBF68319EB927E009483A2 /* BackgroundMusic.swift */,
 			);
 			path = SwiftNinja;
 			sourceTree = "<group>";
@@ -279,7 +279,7 @@
 				B9FBF64E19EB6FF6009483A2 /* GameViewController.swift in Sources */,
 				B9FBF68019EB8B84009483A2 /* Dice.swift in Sources */,
 				B9FBF67E19EB814A009483A2 /* GameOverScene.swift in Sources */,
-				B9FBF68419EB927E009483A2 /* Sound.swift in Sources */,
+				B9FBF68419EB927E009483A2 /* BackgroundMusic.swift in Sources */,
 				B9FBF68219EB8E2E009483A2 /* Common.swift in Sources */,
 				B9FBF64819EB6FF6009483A2 /* AppDelegate.swift in Sources */,
 			);

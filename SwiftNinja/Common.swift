@@ -37,6 +37,12 @@ extension CGPoint {
     func normalized() -> CGPoint {
         return self / length()
     }
+    
+    func distance(point: CGPoint) -> CGFloat {
+        let dx = x - point.x
+        let dy = y - point.y
+        return sqrt(dx*dx + dy+dy)
+    }
 }
 
 struct PhysicsCategory {

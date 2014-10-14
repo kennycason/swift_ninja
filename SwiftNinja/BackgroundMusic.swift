@@ -1,5 +1,5 @@
 //
-//  Music.swift
+//  BackgroundSound.swift
 //  SwiftNinja
 //
 //  Created by Kenny Cason on 10/12/14.
@@ -8,31 +8,41 @@
 
 import AVFoundation
 
-class Sound {
-    
+class BackgroundMusic {
+
     var backgroundMusicPlayer: AVAudioPlayer!
+    var filename: String
     
-    func playBackgroundMusic(filename: String) {
-        let url = NSBundle.mainBundle().URLForResource(
-            filename, withExtension: nil)
+    init(filename: String) {
+        self.filename = filename
+        
+        let url = NSBundle.mainBundle().URLForResource(filename, withExtension: nil)
         if (url == nil) {
             println("Could not find file: \(filename)")
             return
         }
         
         var error: NSError? = nil
-        backgroundMusicPlayer =
-            AVAudioPlayer(contentsOfURL: url, error: &error)
+        backgroundMusicPlayer = AVAudioPlayer(contentsOfURL: url, error: &error)
         if backgroundMusicPlayer == nil {
             println("Could not create audio player: \(error!)")
             return
         }
-        
         backgroundMusicPlayer.numberOfLoops = -1
         backgroundMusicPlayer.prepareToPlay()
+    }
+    
+    func play() {
+        stop()
         backgroundMusicPlayer.play()
     }
     
-    init() { }
+    func pause() {
+        backgroundMusicPlayer.pause()
+    }
     
+    func stop() {
+        backgroundMusicPlayer.stop()
+    }
+
 }

@@ -8,14 +8,16 @@
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    
     let maxLife = 5
-    let sound = Sound()
+    let bgMusic = BackgroundMusic(filename: "background-music-aac.caf")
     let dice = Dice()
     let player = SKSpriteNode(imageNamed: "player")
     let killedLabel = SKLabelNode(fontNamed: "Chalkduster")
     let lifeLabel = SKLabelNode(fontNamed: "Chalkduster")
     
     var life = 5
+    var isMoving = false
     var monstersDestroyed = 0
     
     override func didMoveToView(view: SKView) {
@@ -40,7 +42,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         lifeLabel.position = CGPoint(x: 5, y: size.height - 25)
         lifeLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Left;
         addChild(lifeLabel)
-        
+
         physicsWorld.gravity = CGVectorMake(0, 0)
         physicsWorld.contactDelegate = self
         
@@ -50,8 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 SKAction.waitForDuration(1.0)
                 ])
             ))
-        
-        sound.playBackgroundMusic("background-music-aac.caf")
+        bgMusic.play()
     }
     
     func buildLifeString() -> String {
@@ -94,7 +95,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(monster)
         
         // Determine speed of the monster
-        let actualDuration = dice.random(min: CGFloat(2.0), max: CGFloat(4.0))
+        let actualDuration = dice.random(min: CGFloat(4.0), max: CGFloat(8.0))
         
         // Create the actions
         let actionMove = SKAction.moveTo(CGPoint(x: -monster.size.width/2, y: actualY), duration: NSTimeInterval(actualDuration))
@@ -108,13 +109,47 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         monster.runAction(SKAction.sequence([actionMove, hitPlayerAction, actionMoveDone]))
     }
     
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-        
-        // 1 - Choose one of the touches to work with
+    // only throw a projectile when clicking far away from the player
+    // click near player to move
+    func shouldThrowProjectile(touch: UITouch) -> Bool {
+        let touchLocation = touch.locationInNode(self)
+        return player.position.distance(CGPoint(x: touchLocation.x, y: touchLocation.y)) > 75
+    }
+    
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        // Choose one of the touches to work with
         let touch = touches.anyObject() as UITouch
+
+        // if touching throw projectile button
+        if shouldThrowProjectile(touch) {
+            throwProjectile(touch)
+        } else {
+            movePlayer(touch)
+        }
+    }
+    
+    func movePlayer(touch: UITouch) {
+        if isMoving { return }
+        
+        let touchLocation = touch.locationInNode(self)
+        let offset = touchLocation - player.position
+        let direction = offset.normalized()
+        let moveAmmount = direction * 30
+        isMoving = true
+        
+        let realDest = moveAmmount + player.position
+        
+        let actionMove = SKAction.moveTo(realDest, duration: 0.5)
+        let actionMoveFinished = SKAction.runBlock({self.isMoving = false})
+        
+        player.runAction(SKAction.sequence([actionMove, actionMoveFinished]))
+    }
+    
+    func throwProjectile(touch: UITouch) {
+        // Choose one of the touches to work with
         let touchLocation = touch.locationInNode(self)
         
-        // 2 - Set up initial location of projectile
+        // Set up initial location of projectile
         let projectile = SKSpriteNode(imageNamed: "projectile")
         projectile.position = player.position
         
@@ -124,6 +159,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         projectile.physicsBody?.contactTestBitMask = PhysicsCategory.Monster
         projectile.physicsBody?.collisionBitMask = PhysicsCategory.None
         projectile.physicsBody?.usesPreciseCollisionDetection = true
+        projectile.runAction(SKAction.repeatActionForever(SKAction.rotateByAngle(CGFloat(M_PI), duration:0.5)))
         
         // 3 - Determine offset of location to projectile
         let offset = touchLocation - projectile.position
@@ -164,12 +200,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func doWin() {
+        bgMusic.stop()
         let reveal = SKTransition.flipHorizontalWithDuration(0.5)
         let gameOverScene = GameOverScene(size: self.size, won: true)
         self.view?.presentScene(gameOverScene, transition: reveal)
     }
     
     func doGameOver() {
+        bgMusic.stop()
         let reveal = SKTransition.flipHorizontalWithDuration(0.5)
         let gameOverScene = GameOverScene(size: self.size, won: false)
         self.view?.presentScene(gameOverScene, transition: reveal)
