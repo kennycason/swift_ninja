@@ -22,12 +22,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMoveToView(view: SKView) {
         backgroundColor = SKColor.whiteColor()
+        
         player.position = CGPoint(x: size.width * 0.1, y: size.height * 0.5)
         player.physicsBody = SKPhysicsBody(rectangleOfSize: player.size)
         player.physicsBody?.dynamic = true
         player.physicsBody?.categoryBitMask = PhysicsCategory.Player
         player.physicsBody?.contactTestBitMask = PhysicsCategory.Monster
         player.physicsBody?.collisionBitMask = PhysicsCategory.None
+        player.physicsBody?.usesPreciseCollisionDetection = true
         addChild(player)
         
         killedLabel.text = "Killed " + String(monstersDestroyed)
@@ -57,19 +59,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func buildLifeString() -> String {
         var lifeString = "Life "
-        if(life <= 0) {
-            for _ in 1...maxLife {
-                lifeString += "□ "
-            }
-            return lifeString
-        }
-        
-        for _ in 1...life {
-            lifeString += "■ "
-        }
-        var i: Int
-        for i = 0; i < maxLife - life; i++ {
-            lifeString += "□ "
+        for i in 1...maxLife {
+            lifeString += life >= i ? "■ " : "□ "
         }
         return lifeString
     }
@@ -142,6 +133,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let actionMove = SKAction.moveTo(realDest, duration: 0.5)
         let actionMoveFinished = SKAction.runBlock({self.isMoving = false})
         
+        
         player.runAction(SKAction.sequence([actionMove, actionMoveFinished]))
     }
     
@@ -164,8 +156,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // 3 - Determine offset of location to projectile
         let offset = touchLocation - projectile.position
         
-        // 4 - Bail out if you are shooting down or backwards
-        if (offset.x < 0) { return }
+//        // 4 - Bail out if you are shooting down or backwards
+//        if (offset.x < 0) { return }
         
         // 5 - OK to add now - you've double checked position
         addChild(projectile)

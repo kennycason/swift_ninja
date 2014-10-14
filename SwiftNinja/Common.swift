@@ -41,7 +41,7 @@ extension CGPoint {
     func distance(point: CGPoint) -> CGFloat {
         let dx = x - point.x
         let dy = y - point.y
-        return sqrt(dx*dx + dy+dy)
+        return sqrt(dx*dx + dy*dy)
     }
 }
 
